@@ -4,9 +4,7 @@ import { useCart } from '@/app/context/CartContext';
 import Image from 'next/image';
 
 const CartPage = () => {
-  const { cartItems, removeFromCart } = useCart();
-
-  const totalPrice = cartItems.reduce((acc, item) => acc + item.price, 0);
+  const { cartItems, removeFromCart, totalPrice } = useCart();
 
   if (cartItems.length === 0) {
     return <p>Koszyk jest pusty.</p>;

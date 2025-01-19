@@ -5,9 +5,10 @@ import { ProductCard } from './ui/product-card/ProductCard';
 import { Product } from '@/app/lib/definitions';
 import { getProducts } from '@/app/lib/data';
 
-const Home = () => {
+export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [visibleProducts, setVisibleProducts] = useState(9);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -24,17 +25,26 @@ const Home = () => {
     fetchProducts();
   }, []);
 
+  const loadMore = () => {
+    setVisibleProducts((prev) => prev + 9);
+  };
+
+  const productsToShow = products.slice(0, visibleProducts);
+
   if (isLoading) {
     return <p>Ładowanie produktów...</p>;
   }
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-      {products.map((product) => (
+      {productsToShow.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
+      {products.length > visibleProducts && (
+        <button onClick={loadMore} className="btn btn-secondary mt-4">
+          Więcej
+        </button>
+      )}
     </div>
   );
-};
-
-export default Home;
+}
