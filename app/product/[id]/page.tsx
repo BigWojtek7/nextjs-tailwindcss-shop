@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Product } from '@/app/lib/definitions';
 import { useCart } from '@/app/context/CartContext';
+import { getProduct } from '@/app/lib/data';
 
 const ProductDetails = () => {
   const params = useParams();
@@ -15,21 +16,16 @@ const ProductDetails = () => {
 
   useEffect(() => {
     if (id) {
-      // Mock API fetch dla konkretnego produktu
       const fetchProduct = async () => {
-        // Przykładowe dane
-        const data: Product = {
-          id: Number(id),
-          name: `Produkt ${id}`,
-          price: 100 * Number(id),
-          image: `/images/product${id}.jpg`,
-          description: `Opis produktu ${id}`,
-        };
-        // Symulacja opóźnienia
-        setTimeout(() => {
+        try {
+          const data = await getProduct(id as string);
           setProduct(data);
+        } catch (error) {
+          console.error('Błąd podczas pobierania produktu:', error);
+          setProduct(null);
+        } finally {
           setIsLoading(false);
-        }, 1000);
+        }
       };
 
       fetchProduct();

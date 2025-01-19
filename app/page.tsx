@@ -3,37 +3,22 @@
 import { useEffect, useState } from 'react';
 import { ProductCard } from './ui/product-card/ProductCard';
 import { Product } from '@/app/lib/definitions';
+import { getProducts } from '@/app/lib/data';
 
 const Home = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Mock API fetch
     const fetchProducts = async () => {
-      // Przykładowe dane
-      const data: Product[] = [
-        {
-          id: 1,
-          name: 'Produkt 1',
-          price: 100,
-          image: '/images/product1.jpg',
-          description: 'Opis produktu 1',
-        },
-        {
-          id: 2,
-          name: 'Produkt 2',
-          price: 200,
-          image: '/images/product2.jpg',
-          description: 'Opis produktu 2',
-        },
-        // Dodaj więcej produktów według potrzeb
-      ];
-      // Symulacja opóźnienia
-      setTimeout(() => {
+      try {
+        const data = await getProducts();
         setProducts(data);
+      } catch (error) {
+        console.error('Błąd podczas pobierania produktów:', error);
+      } finally {
         setIsLoading(false);
-      }, 1000);
+      }
     };
 
     fetchProducts();

@@ -1,4 +1,4 @@
-'use client';
+// 'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,15 +8,16 @@ interface ProductCardProps {
   product: Product;
 }
 
-export const ProductCard = ({ product }: ProductCardProps) => {
+export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="card bg-base-100 shadow-xl">
       <figure>
         <Image
           src={product.image}
           alt={product.name}
-          width={400}
-          height={300}
+          width={200}
+          height={100}
+          className="object-cover"
         />
       </figure>
       <div className="card-body">
@@ -30,4 +31,4 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       </div>
     </div>
   );
-};
+}
