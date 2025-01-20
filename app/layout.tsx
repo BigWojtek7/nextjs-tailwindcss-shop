@@ -3,28 +3,32 @@ import { roboto } from '@/app/ui/fonts';
 import './ui/globals.css';
 import { Header } from './ui/header/Header';
 import { Footer } from './ui/footer/Footer';
-import { CartProvider } from '@/app/context/CartContext';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]/route';
+import { Providers } from './providers';
 
 export const metadata: Metadata = {
   title: 'E-Shop',
   description: 'Aplikacja e-commerce stworzona w Next.js',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="pl">
       <body
         className={`${roboto.className} flex min-h-screen flex-col antialiased`}
       >
-        <CartProvider>
+        <Providers session={session}>
           <Header />
           <main className="container mx-auto flex-1 p-4">{children}</main>
           <Footer />
-        </CartProvider>
+        </Providers>
       </body>
     </html>
   );
