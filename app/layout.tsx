@@ -17,10 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pl">
-      <body className={`${roboto.className} antialiased`}>
+      <body
+        className={`${roboto.className} flex min-h-screen flex-col antialiased`}
+      >
         <CartProvider>
           <Header />
-          <main className="container mx-auto p-4">{children}</main>
+          <main className="container mx-auto flex-1 p-4">{children}</main>
           <Footer />
         </CartProvider>
       </body>

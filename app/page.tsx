@@ -32,7 +32,7 @@ export default function HomePage() {
   const productsToShow = products.slice(0, visibleProducts);
 
   if (isLoading) {
-    return <p>Ładowanie produktów...</p>;
+    return <p>Loading products...</p>;
   }
 
   return (
