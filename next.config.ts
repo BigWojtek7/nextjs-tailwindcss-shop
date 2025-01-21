@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'img.daisyui.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'localhost',
+      },
     ],
   },
 };

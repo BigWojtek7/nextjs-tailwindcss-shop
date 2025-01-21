@@ -1,5 +1,6 @@
 'use client';
 
+import UserAvatar from '../avatar/UserAvatar';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/app/context/CartContext';
@@ -68,15 +69,7 @@ export function Header() {
               className="avatar btn btn-circle btn-ghost"
             >
               <div className="w-10 rounded-full">
-                <Image
-                  alt="User Avatar"
-                  src={
-                    session?.user?.image ||
-                    'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'
-                  }
-                  width={100}
-                  height={100}
-                />
+                <UserAvatar size={40} />
               </div>
             </div>
             <ul

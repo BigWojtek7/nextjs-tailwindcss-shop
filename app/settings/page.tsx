@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import AvatarUpload from '../ui/avatar/AvatarUpload';
 
 export default function SettingsPage() {
   const { data: session, update } = useSession();
@@ -100,6 +101,18 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-base-100 py-8">
       <div className="container mx-auto max-w-5xl px-4">
         <div className="mb-8 rounded-lg bg-gray-800 p-6 shadow-lg">
+          <div className="mb-8 border-b border-gray-700 pb-8">
+            <h2 className="mb-4 text-xl font-semibold text-white">
+              Twój Avatar
+            </h2>
+            <div className="flex items-center gap-6">
+              <AvatarUpload />
+              <div className="text-gray-300">
+                <p className="text-sm">Maksymalny rozmiar pliku: 2MB</p>
+                <p className="text-sm">Akceptowane formaty: PNG, JPG, WEBP</p>
+              </div>
+            </div>
+          </div>
           <h2 className="mb-4 text-2xl font-bold text-white">
             Ustawienia Użytkownika
           </h2>
@@ -107,7 +120,10 @@ export default function SettingsPage() {
           {error && <p className="mb-4 text-red-500">{error}</p>}
           <form onSubmit={handleUpdate} className="mb-8 space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-300">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-300"
+              >
                 Imię
               </label>
               <input
@@ -122,7 +138,10 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-300"
+              >
                 Email
               </label>
               <input
@@ -137,7 +156,10 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-300"
+              >
                 Nowe Hasło
               </label>
               <input
@@ -161,15 +183,17 @@ export default function SettingsPage() {
             </div>
           </form>
 
-          <h2 className="mb-4 text-xl font-semibold text-white">Historia Zamówień</h2>
+          <h2 className="mb-4 text-xl font-semibold text-white">
+            Historia Zamówień
+          </h2>
 
           {orders.length === 0 ? (
             <p className="text-gray-300">Nie masz jeszcze żadnych zamówień.</p>
           ) : (
             <div className="space-y-4">
               {orders.map((order) => (
-                <div 
-                  key={order.id} 
+                <div
+                  key={order.id}
                   className="flex items-center justify-between rounded-lg bg-gray-700 p-4 shadow-md"
                 >
                   <div className="text-white">
