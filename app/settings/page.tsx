@@ -1,0 +1,212 @@
+'use client';
+
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+
+export default function SettingsPage() {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const [name, setName] = useState(session?.user?.name || '');
+  const [email, setEmail] = useState(session?.user?.email || '');
+  const [password, setPassword] = useState('');
+  const [orders, setOrders] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  // Pobierz zamówienia użytkownika
+  const fetchOrders = async () => {
+    try {
+      const res = await fetch('/api/orders', {
+        method: 'GET',
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrders(data.orders);
+      } else {
+        setError(data.error || 'Błąd podczas pobierania zamówień');
+      }
+    } catch (err) {
+      setError('Wystąpił błąd podczas pobierania zamówień');
+    }
+  };
+
+  // Wywołaj fetchOrders po załadowaniu komponentu
+  useState(() => {
+    fetchOrders();
+  }, []);
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage(null);
+    setError(null);
+
+    try {
+      const res = await fetch('/api/user/update', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await res.json();
+      console.log(data);
+      if (res.ok) {
+        setMessage('Dane zostały zaktualizowane pomyślnie.');
+        // Opcjonalnie, odśwież sesję
+        router.refresh();
+      } else {
+        setError(data.error || 'Błąd podczas aktualizacji danych');
+      }
+    } catch (err) {
+      setError('Wystąpił błąd podczas aktualizacji danych');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteOrder = async (orderId: string) => {
+    if (!confirm('Czy na pewno chcesz usunąć to zamówienie?')) return;
+
+    try {
+      const res = await fetch(`/api/orders/${orderId}`, {
+        method: 'DELETE',
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage('Zamówienie zostało usunięte.');
+        // Odśwież listę zamówień
+        fetchOrders();
+      } else {
+        setError(data.error || 'Błąd podczas usuwania zamówienia');
+      }
+    } catch (err) {
+      setError('Wystąpił błąd podczas usuwania zamówienia');
+    }
+  };
+
+  if (!session) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p>Musisz być zalogowany, aby uzyskać dostęp do tej strony.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="mb-6 text-2xl font-bold">Ustawienia Konta</h1>
+
+      {message && (
+        <div className="mb-4 rounded-md bg-green-50 p-4">
+          <p className="text-sm text-green-700">{message}</p>
+        </div>
+      )}
+
+      {error && (
+        <div className="mb-4 rounded-md bg-red-50 p-4">
+          <p className="text-sm text-red-700">{error}</p>
+        </div>
+      )}
+
+      <form onSubmit={handleUpdate} className="mb-8 space-y-4">
+        <div>
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Imię
+          </label>
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            placeholder="Twoje imię"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            placeholder="Twój email"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Nowe Hasło
+          </label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            placeholder="Nowe hasło (opcjonalne)"
+          />
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 disabled:bg-indigo-400"
+          >
+            {isLoading ? 'Aktualizowanie...' : 'Aktualizuj Dane'}
+          </button>
+        </div>
+      </form>
+
+      <h2 className="mb-4 text-xl font-semibold">Historia Zamówień</h2>
+
+      {orders.length === 0 ? (
+        <p>Nie masz jeszcze żadnych zamówień.</p>
+      ) : (
+        <div className="space-y-4">
+          {orders.map((order) => (
+            <div
+              key={order.id}
+              className="flex items-center justify-between rounded-lg bg-base-100 p-4 shadow-md"
+            >
+              <div>
+                <p className="font-medium">Zamówienie #{order.id}</p>
+                <p>Status: {order.status}</p>
+                <p>Całkowita kwota: {order.total.toFixed(2)} PLN</p>
+              </div>
+              <button
+                onClick={() => handleDeleteOrder(order.id)}
+                className="rounded-md bg-red-600 px-3 py-1 text-white hover:bg-red-700"
+              >
+                Usuń
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
