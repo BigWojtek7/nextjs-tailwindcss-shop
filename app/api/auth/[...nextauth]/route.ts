@@ -1,9 +1,23 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
+import NextAuth, { DefaultSession, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { PrismaClient } from '@prisma/client';
 import { compare } from 'bcryptjs';
+import { prisma } from '@/app/lib/prisma';
 
-const prisma = new PrismaClient();
+declare module 'next-auth' {
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+      name?: string | null;
+    };
+  }
+
+  interface User {
+    id: string;
+    email: string;
+    name?: string | null;
+  }
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -62,14 +76,16 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
+        token.name = user.name;
       }
       return token;
     },
     async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.email = token.email as string;
-      }
+      session.user = {
+        id: token.id as string,
+        email: token.email as string,
+        name: token.name as string | null,
+      };
       return session;
     },
   },
