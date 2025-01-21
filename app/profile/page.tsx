@@ -33,6 +33,7 @@ export default function ProfilePage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  console.log(session?.user);
 
   useEffect(() => {
     if (status === 'unauthenticated') {

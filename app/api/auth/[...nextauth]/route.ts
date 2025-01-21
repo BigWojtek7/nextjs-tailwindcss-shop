@@ -32,38 +32,15 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
-
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
-          select: {
-            id: true,
-            email: true,
-            name: true,
-            password: true,
-          },
         });
 
-        if (!user) {
-          return null;
+        if (user && (await compare(credentials.password, user.password))) {
+          return { id: user.id, name: user.name, email: user.email };
         }
 
-        const isPasswordValid = await compare(
-          credentials.password,
-          user.password
-        );
-
-        if (!isPasswordValid) {
-          return null;
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-        };
+        return null;
       },
     }),
   ],
@@ -77,6 +54,17 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
+      } else {
+        // Pobierz najnowsze dane użytkownika z bazy danych
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { name: true, email: true },
+        });
+
+        if (dbUser) {
+          token.email = dbUser.email;
+          token.name = dbUser.name;
+        }
       }
       return token;
     },

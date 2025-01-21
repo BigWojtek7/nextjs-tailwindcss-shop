@@ -9,7 +9,6 @@ export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [visibleProducts, setVisibleProducts] = useState(9);
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {

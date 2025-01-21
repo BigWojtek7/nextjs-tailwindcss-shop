@@ -1,54 +1,92 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { prisma } from '@/app/lib/prisma';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions);
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
   const { id } = params;
 
-  if (!session?.user?.id) {
+  if (!id || typeof id !== 'string' || id.trim() === '') {
     return NextResponse.json(
-      { error: 'Musisz być zalogowany' },
-      { status: 401 }
+      { error: 'Nieprawidłowy format ID zamówienia' },
+      { status: 400 }
     );
   }
 
   try {
-    // Sprawdź, czy zamówienie należy do użytkownika
-    const order = await prisma.order.findUnique({
-      where: { id },
-      select: { userId: true },
-    });
+    const session = await getServerSession(authOptions);
 
-    if (!order) {
+    if (!session?.user?.id || typeof session.user.id !== 'string') {
+      console.error('Brak sesji lub nieprawidłowe ID użytkownika');
       return NextResponse.json(
-        { error: 'Zamówienie nie zostało znalezione' },
-        { status: 404 }
+        { error: 'Wymagane uwierzytelnienie' },
+        { status: 401 }
       );
     }
 
-    if (order.userId !== session.user.id) {
-      return NextResponse.json(
-        { error: 'Nie masz uprawnień do usunięcia tego zamówienia' },
-        { status: 403 }
-      );
-    }
+    await prisma.$transaction(async (prisma) => {
+      const order = await prisma.order.findUnique({
+        where: { id },
+        select: { userId: true },
+      });
 
-    // Usuń zamówienie
-    await prisma.order.delete({
-      where: { id },
-    });
+      if (!order) throw new Error('NOT_FOUND');
+      if (order.userId !== session.user.id) throw new Error('FORBIDDEN');
+
+      await prisma.orderItem.deleteMany({
+        where: { orderId: id },
+      });
+
+      await prisma.order.delete({
+        where: { id },
+      });
+    }); // Usunięto przypisanie do zmiennej
 
     return NextResponse.json(
       { message: 'Zamówienie zostało usunięte' },
       { status: 200 }
     );
   } catch (error) {
-    console.error('Delete order error:', error);
+    // Poprawne logowanie błędów
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
+    console.error('[ORDER_DELETE_ERROR]', errorMessage);
+
+    // Obsługa własnych błędów
+    if (errorMessage === 'NOT_FOUND') {
+      return NextResponse.json(
+        { error: 'Zamówienie nie istnieje' },
+        { status: 404 }
+      );
+    }
+
+    if (errorMessage === 'FORBIDDEN') {
+      return NextResponse.json({ error: 'Brak uprawnień' }, { status: 403 });
+    }
+
+    // Obsługa błędów Prisma
+    if (error instanceof PrismaClientKnownRequestError) {
+      switch (error.code) {
+        case 'P2023':
+          return NextResponse.json(
+            { error: 'Nieprawidłowy format ID' },
+            { status: 400 }
+          );
+        case 'P2025':
+          return NextResponse.json(
+            { error: 'Zamówienie nie istnieje' },
+            { status: 404 }
+          );
+      }
+    }
+
     return NextResponse.json(
-      { error: 'Wystąpił błąd podczas usuwania zamówienia' },
+      { error: 'Wewnętrzny błąd serwera' },
       { status: 500 }
     );
   }
-} 
+}
