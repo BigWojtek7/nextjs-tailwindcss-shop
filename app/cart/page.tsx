@@ -100,7 +100,7 @@ export default function CartPage() {
             {items.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between rounded-lg bg-white p-4 shadow-md"
+                className="flex items-center justify-between rounded-lg bg-base-100 p-4 shadow-md"
               >
                 <div className="flex items-center space-x-4">
                   {item.image && (
@@ -124,14 +124,14 @@ export default function CartPage() {
                       onClick={() =>
                         updateQuantity(item.id, Math.max(1, item.quantity - 1))
                       }
-                      className="rounded-l bg-gray-100 px-3 py-1 hover:bg-gray-200"
+                      className="rounded-l bg-black px-3 py-1 hover:bg-gray-800"
                     >
                       -
                     </button>
                     <span className="w-12 text-center">{item.quantity}</span>
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      className="rounded-r bg-gray-100 px-3 py-1 hover:bg-gray-200"
+                      className="rounded-r bg-black px-3 py-1 hover:bg-gray-800"
                     >
                       +
                     </button>
@@ -147,7 +147,7 @@ export default function CartPage() {
             ))}
           </div>
         </div>
-        <div className="rounded-lg bg-white p-6 shadow-md">
+        <div className="rounded-lg bg-base-100 p-6 shadow-md">
           <h2 className="mb-4 text-xl font-semibold">Podsumowanie</h2>
           <div className="space-y-2">
             <div className="flex justify-between border-t pt-4">
