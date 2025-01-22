@@ -1,6 +1,7 @@
 'use client';
 
 import { CartProvider } from '@/app/context/CartContext';
+import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 
 export function Providers({
@@ -8,7 +9,7 @@ export function Providers({
   session,
 }: {
   children: React.ReactNode;
-  session: any;
+  session: Session;
 }) {
   return (
     <SessionProvider session={session}>

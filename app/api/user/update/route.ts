@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { prisma } from '@/app/lib/prisma';
 import { hash } from 'bcryptjs';
-
+import { Prisma } from '@prisma/client';
 interface UpdateUserData {
   name?: string;
   email?: string;
@@ -24,7 +24,7 @@ export async function PUT(req: Request) {
     const data: UpdateUserData = await req.json();
     const { name, email, password } = data;
 
-    const updateData: any = {};
+    const updateData: Prisma.UserUpdateInput = {};
 
     if (name) updateData.name = name;
     if (email) updateData.email = email;
@@ -47,10 +47,12 @@ export async function PUT(req: Request) {
       { message: 'Dane użytkownika zostały zaktualizowane', user: updatedUser },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error('Update user error:', error);
 
-    if (error.code === 'P2002') {
+    const e = error as { code?: string; message?: string };
+
+    if (e.code === 'P2002') {
       return NextResponse.json(
         { error: 'Użytkownik z tym adresem email już istnieje' },
         { status: 400 }
