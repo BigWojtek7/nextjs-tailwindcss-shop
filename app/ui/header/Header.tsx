@@ -1,7 +1,6 @@
 'use client';
 
 import UserAvatar from '../avatar/UserAvatar';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/app/context/CartContext';
 import { useSession, signOut } from 'next-auth/react';

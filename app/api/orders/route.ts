@@ -2,7 +2,18 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
 import { prisma } from '@/app/lib/prisma';
-import type { OrderData } from '@/app/lib/definitions'; // Zalecam wydzielenie typów
+import type { Prisma } from '@prisma/client';
+
+interface OrderData {
+  items: Array<{
+    id: string | number;
+    name: string;
+    price: number;
+    quantity: number;
+    image?: string;
+  }>;
+  total: number;
+}
 
 export async function POST(req: Request) {
   try {
@@ -48,7 +59,7 @@ export async function POST(req: Request) {
     }
 
     // Tworzenie zamówienia z transakcją
-    const order = await prisma.$transaction(async (prisma) => {
+    const order = await prisma.$transaction(async (prisma:  Prisma.TransactionClient) => {
       const order = await prisma.order.create({
         data: {
           userId: session.user.id,

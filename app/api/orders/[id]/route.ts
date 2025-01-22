@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { prisma } from '@/app/lib/prisma';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import type { Prisma } from '@prisma/client';
 
 export async function DELETE(
   req: Request,
@@ -28,7 +29,7 @@ export async function DELETE(
       );
     }
 
-    await prisma.$transaction(async (prisma) => {
+    await prisma.$transaction(async (prisma: Prisma.TransactionClient) => {
       const order = await prisma.order.findUnique({
         where: { id },
         select: { userId: true },

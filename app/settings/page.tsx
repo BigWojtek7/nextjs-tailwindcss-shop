@@ -1,19 +1,17 @@
 'use client';
+import { Order } from '@prisma/client';
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import AvatarUpload from '../ui/avatar/AvatarUpload';
 
 export default function SettingsPage() {
   const { data: session, update } = useSession();
-  const router = useRouter();
 
   const [name, setName] = useState(session?.user?.name || '');
   const [email, setEmail] = useState(session?.user?.email || '');
   const [password, setPassword] = useState('');
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -38,6 +36,7 @@ export default function SettingsPage() {
       }
     } catch (err) {
       setError('Wystąpił błąd podczas pobierania zamówień');
+      console.log(err);
     }
   };
 
@@ -71,6 +70,7 @@ export default function SettingsPage() {
       }
     } catch (err) {
       setError('Wystąpił błąd podczas aktualizacji danych');
+      console.log(err);
     } finally {
       setIsLoading(false);
     }
@@ -94,6 +94,7 @@ export default function SettingsPage() {
       }
     } catch (err) {
       setError('Wystąpił błąd podczas usuwania zamówienia');
+      console.log(err);
     }
   };
 

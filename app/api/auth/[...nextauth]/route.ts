@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession, NextAuthOptions } from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { compare } from 'bcryptjs';
 import { prisma } from '@/app/lib/prisma';
@@ -9,6 +9,7 @@ declare module 'next-auth' {
       id: string;
       email: string;
       name?: string | null;
+      avatarUrl?: string | null;
     };
   }
 
@@ -28,19 +29,47 @@ export const authOptions: NextAuthOptions = {
           label: 'Email',
           type: 'email',
           placeholder: 'example@domain.com',
+          required: true, // Explicit required
         },
-        password: { label: 'Password', type: 'password' },
+        password: {
+          label: 'Password',
+          type: 'password',
+          required: true,
+        },
       },
       async authorize(credentials) {
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+        try {
+          // Strict validation
+          if (!credentials || !credentials.email || !credentials.password) {
+            throw new Error('Invalid credentials format');
+          }
 
-        if (user && (await compare(credentials.password, user.password))) {
-          return { id: user.id, name: user.name, email: user.email };
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email.trim().toLowerCase() },
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              password: true,
+              avatarUrl: true,
+            },
+          });
+
+          if (!user) throw new Error('User not found');
+
+          const isValid = await compare(credentials.password, user.password);
+          if (!isValid) throw new Error('Invalid password');
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.avatarUrl || null,
+          };
+        } catch (error) {
+          console.error('Authorization error:', error);
+          return null;
         }
-
-        return null;
       },
     }),
   ],
@@ -54,16 +83,22 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
+        token.avatarUrl = user.avatarUrl; // Dodajemy avatarUrl do tokena
       } else {
-        // Pobierz najnowsze dane użytkownika z bazy danych
+        // Aktualizacja danych z bazy przy każdym odświeżeniu tokena
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { name: true, email: true },
+          select: {
+            name: true,
+            email: true,
+            avatarUrl: true, // Pobieramy aktualny avatarUrl
+          },
         });
 
         if (dbUser) {
           token.email = dbUser.email;
           token.name = dbUser.name;
+          token.avatarUrl = dbUser.avatarUrl; // Aktualizujemy avatarUrl
         }
       }
       return token;
@@ -73,6 +108,7 @@ export const authOptions: NextAuthOptions = {
         id: token.id as string,
         email: token.email as string,
         name: token.name as string | null,
+        avatarUrl: token.avatarUrl as string | null, // Dodajemy do sesji
       };
       return session;
     },

@@ -8,12 +8,12 @@ import Image from 'next/image';
 const AvatarUpload = () => {
   const { data: session, update } = useSession();
   const [isLoading, setIsLoading] = useState(false);
+  const [avatarVersion, setAvatarVersion] = useState(0); // Dodajemy stan wersji avatara
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !session?.user?.id) return;
 
-    // Walidacja pliku
     if (!file.type.startsWith('image/')) {
       toast.error('Proszę wybrać plik obrazu');
       return;
@@ -33,13 +33,12 @@ const AvatarUpload = () => {
         method: 'POST',
         body: formData,
       });
-      console.log(response);
+
       if (!response.ok) throw new Error('Błąd uploadu');
 
-      // Aktualizacja sesji - NOWA SYNTAXA
-      await update({
-        avatar: `${window.location.origin}/api/user/${session.user.id}/avatar?${Date.now()}`,
-      });
+      // Wymuś aktualizację poprzez zmianę wersji
+      setAvatarVersion(prev => prev + 1);
+      await update();
 
       toast.success('Avatar zaktualizowany!');
     } catch (error) {
@@ -50,20 +49,31 @@ const AvatarUpload = () => {
     }
   };
 
+  // Generuj unikalny URL z timestampem
+  const avatarUrl = session?.user?.avatarUrl 
+    ? `${session.user.avatarUrl}?v=${avatarVersion}&ts=${Date.now()}`
+    : '/default-avatar.png';
+
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="relative h-32 w-32 overflow-hidden rounded-full border-2 border-gray-200">
         <Image
-          src={session?.user?.avatar || '/default-avatar.png'}
+          src={avatarUrl}
           alt="Avatar użytkownika"
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 768px"
+          key={avatarVersion} // Wymuś remont komponentu
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = '/default-avatar.png';
+          }}
         />
       </div>
 
       <label className="relative cursor-pointer">
-        <span className="rounded-lg bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600">
+        <span className={`rounded-lg px-4 py-2 text-white transition-colors ${
+          isLoading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'
+        }`}>
           {isLoading ? 'Przesyłanie...' : 'Zmień avatar'}
         </span>
         <input

@@ -43,6 +43,7 @@ export default function SignIn() {
       });
     } catch (err) {
       setError('Wystąpił błąd podczas logowania');
+      console.log(err);
     } finally {
       setIsLoading(false);
     }

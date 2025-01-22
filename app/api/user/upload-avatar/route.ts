@@ -3,8 +3,6 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { PrismaClient } from '@prisma/client';
-import { IncomingForm } from 'formidable';
-import { promises as fs } from 'fs';
 import sharp from 'sharp';
 
 const prisma = new PrismaClient();
@@ -51,7 +49,7 @@ export async function POST(request: Request) {
       where: { id: session.user.id },
       data: { 
         avatar: optimizedImage,
-        avatarUrl: null
+        avatarUrl: `/api/user/${session.user.id}/avatar`
       },
     });
 
