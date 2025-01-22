@@ -4,7 +4,7 @@ import './ui/globals.css';
 import { Header } from './ui/header/Header';
 import { Footer } from './ui/footer/Footer';
 import { getServerSession } from 'next-auth';
-import { authOptions } from './api/auth/[...nextauth]/route';
+import { authOptions } from './lib/authOptions';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {

@@ -1,7 +1,7 @@
 // app/api/user/upload-avatar/route.ts
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/lib/authOptions';
 import { PrismaClient } from '@prisma/client';
 import sharp from 'sharp';
 

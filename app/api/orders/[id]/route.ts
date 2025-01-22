@@ -1,15 +1,16 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/lib/authOptions';
 import { prisma } from '@/app/lib/prisma';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import type { Prisma } from '@prisma/client';
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+
+  const id = (await params).id
 
   if (!id || typeof id !== 'string' || id.trim() === '') {
     return NextResponse.json(
