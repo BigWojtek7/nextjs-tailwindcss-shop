@@ -1,143 +1,176 @@
 # E-Shop
 
-E-Shop to nowoczesna aplikacja e-commerce stworzona w **Next.js** z wykorzystaniem **TypeScript**, **Tailwind CSS** oraz **NextAuth** do uwierzytelniania użytkowników. Aplikacja korzysta z **PostgreSQL** jako bazy danych, a zarządzanie danymi odbywa się za pomocą **Prisma**.
+E-Shop is a modern e-commerce application built with **Next.js**, utilizing **TypeScript**, **Tailwind CSS**, and **NextAuth** for user authentication. The application uses **PostgreSQL** as its database, and data management is handled through **Prisma**.
 
-## Funkcjonalności
+## Features
 
-- **Rejestracja i logowanie użytkowników**: Bezpieczne uwierzytelnianie za pomocą NextAuth.
-- **Zarządzanie profilem użytkownika**: Edycja danych osobowych, zmiana avataru.
-- **Przeglądanie produktów**: Wyświetlanie produktów z możliwością filtrowania i paginacji.
-- **Koszyk zakupowy**: Dodawanie, usuwanie i aktualizacja ilości produktów w koszyku.
-- **Składanie zamówień**: Proces realizacji zamówienia z integracją z bazą danych.
-- **Historia zamówień**: Przeglądanie historii złożonych zamówień.
-- **Responsywny interfejs użytkownika**: Optymalizacja dla urządzeń mobilnych i desktopów.
+- **User Registration and Login**: Secure authentication using NextAuth.
+- **User Profile Management**: Edit personal information and change avatar.
+- **Product Browsing**: Display products with filtering and pagination options.
+- **Shopping Cart**: Add, remove, and update product quantities in the cart.
+- **Order Placement**: Order processing integrated with the database.
+- **Order History**: View the history of placed orders.
+- **Responsive User Interface**: Optimized for both mobile and desktop devices.
 
-## Technologie
+## Technologies
 
-Projekt wykorzystuje następujące technologie:
+The project leverages the following technologies:
 
-- **Next.js**: Framework React do tworzenia aplikacji serwerowo-renderowanych.
-- **TypeScript**: Statyczne typowanie dla zwiększenia bezpieczeństwa i czytelności kodu.
-- **Tailwind CSS**: Narzędzie do szybkiego stylowania interfejsu użytkownika.
-- **NextAuth**: Biblioteka do uwierzytelniania użytkowników.
-- **Prisma**: ORM do zarządzania bazą danych PostgreSQL.
-- **PostgreSQL**: Relacyjna baza danych.
-- **React**: Biblioteka JavaScript do budowania interfejsów użytkownika.
-- **DaisyUI**: Biblioteki komponentów UI.
+- **Next.js**: A React framework for building server-rendered applications.
+- **TypeScript**: Static typing for enhanced code safety and readability.
+- **Tailwind CSS**: A utility-first CSS framework for rapid UI styling.
+- **NextAuth**: A library for user authentication.
+- **Prisma**: An ORM for managing the PostgreSQL database.
+- **PostgreSQL**: A relational database system.
+- **React**: A JavaScript library for building user interfaces.
+- **DaisyUI**: A UI component library.
+- **Shadcn UI & Radix UI**: UI component libraries providing low-level components.
 
+## Installation
 
-## Instalacja
+### System Requirements
 
-### Wymagania systemowe
+- **Node.js**: Version 18 or higher
+- **PostgreSQL**: Version 12 or higher
+- **npm** or **yarn**: Package managers
 
-- **Node.js**: Wersja 18 lub nowsza
-- **PostgreSQL**: Wersja 12 lub nowsza
-- **npm** lub **yarn**: Menedżery pakietów
+### Installation Steps
 
-### Kroki instalacji
-
-1. **Klonowanie repozytorium**
+1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/twoja-nazwa-uzytkownika/e-shop.git
+   git clone https://github.com/your-username/e-shop.git
    cd e-shop
    ```
 
-2. **Instalacja zależności**
+2. **Install Dependencies**
 
    ```bash
    npm install
-   # lub
+   # or
    yarn install
-   # lub
+   # or
    pnpm install
    ```
 
-3. **Konfiguracja zmiennych środowiskowych**
+3. **Configure Environment Variables**
 
-   Utwórz plik `.env` w katalogu głównym projektu i dodaj następujące zmienne:
+   Create a `.env` file in the root directory of the project and add the following variables:
 
    ```env
-   DATABASE_URL=postgresql://uzytkownik:haslo@localhost:5432/e-shop
+   DATABASE_URL=postgresql://user:password@localhost:5432/e-shop
    NEXTAUTH_URL=http://localhost:3000
-   NEXTAUTH_SECRET=twoj_sekretny_klucz
-   AUTH_SECRET=twoj_sekretny_klucz_nextauth
+   NEXTAUTH_SECRET=your_secret_key
+   AUTH_SECRET=your_nextauth_secret_key
    ```
 
-   - **DATABASE_URL**: Adres połączenia do bazy danych PostgreSQL.
-   - **NEXTAUTH_URL**: URL aplikacji Next.js.
-   - **NEXTAUTH_SECRET**: Sekretny klucz dla NextAuth.
-   - **AUTH_SECRET**: Sekretny klucz dla autoryzacji.
+   - **DATABASE_URL**: Connection string for your PostgreSQL database.
+   - **NEXTAUTH_URL**: URL of your Next.js application (e.g., `http://localhost:3000`).
+   - **NEXTAUTH_SECRET**: Secret key for encrypting sessions in NextAuth.
+   - **AUTH_SECRET**: Secret key for additional authorization features.
 
-4. **Migracja bazy danych**
+4. **Database Migration**
 
-   Aby utworzyć tabele w bazie danych, wykonaj migrację przy użyciu Prisma:
+   To create the necessary tables in your database, run the migration using Prisma:
 
    ```bash
    npx prisma migrate dev --name init
    ```
 
-   Ta komenda:
+   This command will:
 
-   - Tworzy nową migrację z nazwą `init`.
-   - Aktualizuje schemat bazy danych w pliku `prisma/schema.prisma`.
-   - Generuje klienta Prisma do interakcji z bazą danych.
+   - Create a new migration named `init`.
+   - Update the database schema based on `prisma/schema.prisma`.
+   - Generate the Prisma client for interacting with the database.
 
-5. **Uruchomienie aplikacji lokalnie**
+5. **Run the Application Locally**
 
    ```bash
    npm run dev
-   # lub
+   # or
    yarn dev
-   # lub
+   # or
    pnpm dev
    ```
 
-   Aplikacja będzie dostępna pod adresem [http://localhost:3000](http://localhost:3000).
+   The application will be accessible at [http://localhost:3000](http://localhost:3000).
 
-## Struktura Folderów
+## Project Structure
 
+```
+e-shop/
 ├── app/
-│ ├── api/
-│ │ ├── auth/
-│ │ │ └── register/
-│ │ ├── orders/
-│ │ ├── user/
-│ │ │ └── upload-avatar/
-│ │ └── ...
-│ ├── auth/
-│ │ ├── signin/
-│ │ └── signup/
-│ ├── cart/
-│ ├── lib/
-│ │ ├── authOptions.ts
-│ │ ├── data.ts
-│ │ ├── prisma.ts
-│ │ └── ...
-│ ├── profile/
-│ ├── settings/
-│ ├── ui/
-│ │ ├── avatar/
-│ │ ├── footer/
-│ │ ├── header/
-│ │ ├── product-card/
-│ │ └── ...
-│ ├── context/
-│ │ └── CartContext.tsx
-│ ├── page.tsx
-│ ├── layout.tsx
-│ └── ...
+│   ├── api/
+│   │   ├── auth/
+│   │   │   └── register/
+│   │   ├── orders/
+│   │   ├── user/
+│   │   │   └── upload-avatar/
+│   │   └── ...
+│   ├── auth/
+│   │   ├── signin/
+│   │   └── signup/
+│   ├── cart/
+│   ├── lib/
+│   │   ├── authOptions.ts
+│   │   ├── data.ts
+│   │   ├── prisma.ts
+│   │   └── ...
+│   ├── profile/
+│   ├── settings/
+│   ├── ui/
+│   │   ├── avatar/
+│   │   ├── footer/
+│   │   ├── header/
+│   │   ├── product-card/
+│   │   └── ...
+│   ├── context/
+│   │   └── CartContext.tsx
+│   ├── page.tsx
+│   ├── layout.tsx
+│   └── ...
 ├── prisma/
-│ └── schema.prisma
+│   └── schema.prisma
 ├── public/
-│ └── default-avatar.png
+│   └── default-avatar.png
 ├── styles/
-│ └── globals.css
+│   └── globals.css
 ├── middleware.ts
 ├── package.json
 ├── tsconfig.json
 └── README.md
+```
+
+## Configuring Environment Variables
+
+Create a `.env` file in the root directory of the project and add the following variables:
+
+```env
+DATABASE_URL=postgresql://user:password@localhost:5432/e-shop
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_secret_key
+AUTH_SECRET=your_nextauth_secret_key
+```
+
+- **DATABASE_URL**: Connection string to your PostgreSQL database.
+- **NEXTAUTH_URL**: URL of your Next.js application (e.g., `http://localhost:3000`).
+- **NEXTAUTH_SECRET**: Secret key for encrypting sessions in NextAuth.
+- **AUTH_SECRET**: Secret key for additional authorization features.
+
+## Database Migration
+
+The project uses **Prisma** for managing database migrations. To apply the migration, use the following command:
+
+```bash
+npx prisma migrate dev --name init
+```
+
+This command will:
+
+- Create a new migration named `init`.
+- Update the database schema based on `prisma/schema.prisma`.
+- Generate the Prisma client for interacting with the database.
 
 ## License
 
-Projekt jest objęty licencją **MIT**. Zobacz plik [LICENSE](LICENSE) aby dowiedzieć się więcej.
+This project is licensed under the **MIT** License. See the [LICENSE](LICENSE) file for more details.
