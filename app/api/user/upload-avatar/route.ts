@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
-  
+
   if (!session?.user?.id) {
     return NextResponse.json(
       { error: 'Nieautoryzowany dostęp' },
@@ -22,10 +22,7 @@ export async function POST(request: Request) {
 
   // Walidacja pliku
   if (!file) {
-    return NextResponse.json(
-      { error: 'Brak pliku' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Brak pliku' }, { status: 400 });
   }
 
   if (file.size > 2 * 1024 * 1024) {
@@ -37,7 +34,7 @@ export async function POST(request: Request) {
 
   try {
     const buffer = Buffer.from(await file.arrayBuffer());
-    
+
     // Przetwarzanie obrazka
     const optimizedImage = await sharp(buffer)
       .resize(256, 256)
@@ -47,17 +44,13 @@ export async function POST(request: Request) {
     // Aktualizacja użytkownika
     await prisma.user.update({
       where: { id: session.user.id },
-      data: { 
+      data: {
         avatar: optimizedImage,
-        avatarUrl: `/api/user/${session.user.id}/avatar`
+        avatarUrl: `/api/user/${session.user.id}/avatar`,
       },
     });
 
-    return NextResponse.json(
-      { success: true },
-      { status: 200 }
-    );
-
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error('Błąd podczas uploadu avatara:', error);
     return NextResponse.json(
