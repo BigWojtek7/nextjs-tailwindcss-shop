@@ -15,7 +15,7 @@ export default function HomePage() {
         const data = await getProducts();
         setProducts(data);
       } catch (error) {
-        console.error('Błąd podczas pobierania produktów:', error);
+        console.error('Error while fetching products:', error);
       } finally {
         setIsLoading(false);
       }
@@ -41,7 +41,7 @@ export default function HomePage() {
       ))}
       {products.length > visibleProducts && (
         <button onClick={loadMore} className="btn btn-secondary mt-4">
-          Więcej
+          More
         </button>
       )}
     </div>

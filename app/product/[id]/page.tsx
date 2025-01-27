@@ -21,7 +21,7 @@ const ProductDetails = () => {
           const data = await getProduct(id as string);
           setProduct(data);
         } catch (error) {
-          console.error('Błąd podczas pobierania produktu:', error);
+          console.error('Error while fetching product:', error);
           setProduct(null);
         } finally {
           setIsLoading(false);
@@ -33,16 +33,16 @@ const ProductDetails = () => {
   }, [id]);
 
   if (isLoading) {
-    return <p>Ładowanie szczegółów produktu...</p>;
+    return <p>Loading product details...</p>;
   }
 
   if (!product) {
-    return <p>Produkt nie został znaleziony.</p>;
+    return <p>Product not found.</p>;
   }
 
   const handleAddToCart = () => {
     addToCart(product);
-    alert('Produkt dodany do koszyka!');
+    alert('Product added to cart!');
   };
 
   return (
@@ -53,7 +53,7 @@ const ProductDetails = () => {
         <p className="mt-2 text-xl">{product.price} PLN</p>
         <p className="mt-4">{product.description}</p>
         <button onClick={handleAddToCart} className="btn btn-primary mt-6">
-          Dodaj do Koszyka
+          Add to Cart
         </button>
       </div>
     </div>

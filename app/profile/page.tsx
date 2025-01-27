@@ -27,16 +27,16 @@ export default function ProfilePage() {
     async function fetchOrders() {
       try {
         const response = await fetch('/api/orders');
-        if (!response.ok) throw new Error('Błąd podczas pobierania zamówień');
+        if (!response.ok) throw new Error('Error while fetching orders');
         const data: OrdersResponse = await response.json();
         if (data.success) {
           setOrders(data.orders);
         } else {
-          setError(data.error || 'Nieznany błąd podczas pobierania zamówień');
+          setError(data.error || 'Unknown error while fetching orders');
         }
       } catch (error) {
         console.error('Error fetching orders:', error);
-        setError('Wystąpił błąd podczas pobierania zamówień');
+        setError('An error occurred while fetching orders');
       } finally {
         setIsLoading(false);
       }
@@ -50,7 +50,7 @@ export default function ProfilePage() {
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="text-lg">Ładowanie...</div>
+        <div className="text-lg">Loading...</div>
       </div>
     );
   }
@@ -62,30 +62,30 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-base-100 py-8">
       <div className="container mx-auto max-w-5xl px-4">
-        {/* Sekcja profilowa */}
+        {/* Profile Section */}
         <div className="mb-8 rounded-lg bg-gray-800 p-6 shadow-lg">
           <div className="flex flex-col items-center gap-6 md:flex-row md:items-start">
-            {/* Avatar i przyciski */}
+            {/* Avatar and Buttons */}
             <div className="flex flex-col items-center gap-4">
               <UserAvatar size={200} />
               <button
                 onClick={() => signOut({ callbackUrl: '/' })}
                 className="w-full rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
-                Wyloguj się
+                Sign Out
               </button>
             </div>
 
-            {/* Dane użytkownika */}
+            {/* User Data */}
             <div className="flex-1 space-y-4">
-              <h2 className="text-2xl font-bold text-white">Twój profil</h2>
+              <h2 className="text-2xl font-bold text-white">Your Profile</h2>
               <div className="space-y-2 rounded-lg bg-gray-700 p-4">
                 <div className="flex items-center gap-3">
                   <span className="text-white">👤</span>
                   <div>
-                    <p className="text-sm text-gray-300">Imię</p>
+                    <p className="text-sm text-gray-300">Name</p>
                     <p className="text-lg font-medium text-white">
-                      {session.user.name || 'Brak danych'}
+                      {session.user.name || 'No data'}
                     </p>
                   </div>
                 </div>
@@ -103,15 +103,13 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Sekcja historii zamówień */}
+        {/* Order History Section */}
         <div className="rounded-lg bg-gray-800 p-6 shadow-lg">
-          <h3 className="mb-6 text-xl font-bold text-white">
-            Historia zamówień
-          </h3>
+          <h3 className="mb-6 text-xl font-bold text-white">Order History</h3>
           {error ? (
             <p className="text-red-600">{error}</p>
           ) : orders.length === 0 ? (
-            <p className="text-gray-300">Brak zamówień w historii</p>
+            <p className="text-gray-300">No orders in history</p>
           ) : (
             <div className="space-y-6">
               {orders.map((order) => (
@@ -123,7 +121,7 @@ export default function ProfilePage() {
                     <div className="flex flex-col justify-between space-y-4 sm:flex-row sm:space-y-0">
                       <div>
                         <p className="font-semibold text-white">
-                          Zamówienie #{order.id.slice(-6)}
+                          Order #{order.id.slice(-6)}
                         </p>
                         <p className="text-sm text-gray-300">
                           {new Date(order.createdAt).toLocaleDateString(
@@ -138,7 +136,7 @@ export default function ProfilePage() {
                       </div>
                       <div className="text-right">
                         <p className="font-semibold text-white">
-                          Suma: {order.total.toFixed(2)} zł
+                          Total: {order.total.toFixed(2)} zł
                         </p>
                         <p
                           className={`text-sm font-medium ${
@@ -150,10 +148,10 @@ export default function ProfilePage() {
                           }`}
                         >
                           {order.status === 'COMPLETED'
-                            ? 'Zrealizowane'
+                            ? 'Completed'
                             : order.status === 'CANCELLED'
-                              ? 'Anulowane'
-                              : 'W trakcie realizacji'}
+                              ? 'Cancelled'
+                              : 'In Progress'}
                         </p>
                       </div>
                     </div>

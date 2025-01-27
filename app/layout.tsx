@@ -9,7 +9,7 @@ import { Providers } from './providers';
 
 export const metadata: Metadata = {
   title: 'E-Shop',
-  description: 'Aplikacja e-commerce stworzona w Next.js',
+  description: 'E-commerce application built with Next.js',
 };
 
 export default async function RootLayout({
@@ -20,7 +20,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
 
   return (
-    <html lang="pl">
+    <html lang="en">
       <body
         className={`${roboto.className} flex min-h-screen flex-col antialiased`}
       >

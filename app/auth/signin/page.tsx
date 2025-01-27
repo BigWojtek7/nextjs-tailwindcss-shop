@@ -19,8 +19,8 @@ export default function SignIn() {
     if (error) {
       setError(
         error === 'CredentialsSignin'
-          ? 'Nieprawidłowy email lub hasło'
-          : 'Wystąpił błąd podczas logowania'
+          ? 'Invalid email or password'
+          : 'An error occurred during login'
       );
     }
   }, [searchParams]);
@@ -42,7 +42,7 @@ export default function SignIn() {
         callbackUrl: '/profile',
       });
     } catch (err) {
-      setError('Wystąpił błąd podczas logowania');
+      setError('An error occurred during login');
       console.log(err);
     } finally {
       setIsLoading(false);
@@ -54,7 +54,7 @@ export default function SignIn() {
       <div className="w-full max-w-md space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight">
-            Zaloguj się do konta
+            Sign in to your account
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -66,14 +66,14 @@ export default function SignIn() {
           {showSuccess && (
             <div className="rounded-md bg-green-50 p-4">
               <p className="text-sm text-green-700">
-                Rejestracja udana! Możesz się teraz zalogować.
+                Registration successful! You can now log in.
               </p>
             </div>
           )}
           <div className="space-y-4 rounded-md shadow-sm">
             <div>
               <label htmlFor="email" className="sr-only">
-                Email
+                Email address
               </label>
               <input
                 id="email"
@@ -86,7 +86,7 @@ export default function SignIn() {
             </div>
             <div>
               <label htmlFor="password" className="sr-only">
-                Hasło
+                Password
               </label>
               <input
                 id="password"
@@ -105,18 +105,18 @@ export default function SignIn() {
               disabled={isLoading}
               className="group relative flex w-full justify-center rounded-md  px-3 py-2 bg-indigo-600 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-400"
             >
-              {isLoading ? 'Logowanie...' : 'Zaloguj się'}
+              {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
         </form>
 
         <p className="mt-2 text-center text-sm text-gray-600">
-          Nie masz konta?{' '}
+          Don&apos;t have an account?{' '}
           <Link
             href="/auth/signup"
             className="font-medium text-indigo-600 hover:text-indigo-500"
           >
-            Zarejestruj się
+            Register
           </Link>
         </p>
       </div>

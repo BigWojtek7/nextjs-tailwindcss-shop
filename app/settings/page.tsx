@@ -32,10 +32,10 @@ export default function SettingsPage() {
       if (data.success) {
         setOrders(data.orders);
       } else {
-        setError(data.error || 'Błąd podczas pobierania zamówień');
+        setError(data.error || 'Error while fetching orders');
       }
     } catch (err) {
-      setError('Wystąpił błąd podczas pobierania zamówień');
+      setError('An error occurred while fetching orders');
       console.log(err);
     }
   };
@@ -62,14 +62,14 @@ export default function SettingsPage() {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage('Dane zostały zaktualizowane pomyślnie.');
+        setMessage('Data has been updated successfully.');
         setPassword('');
         await update();
       } else {
-        setError(data.error || 'Błąd podczas aktualizacji danych');
+        setError(data.error || 'Error while updating data');
       }
     } catch (err) {
-      setError('Wystąpił błąd podczas aktualizacji danych');
+      setError('An error occurred while updating data');
       console.log(err);
     } finally {
       setIsLoading(false);
@@ -77,7 +77,7 @@ export default function SettingsPage() {
   };
 
   const handleDeleteOrder = async (orderId: string) => {
-    if (!confirm('Czy na pewno chcesz usunąć to zamówienie?')) return;
+    if (!confirm('Are you sure you want to delete this order?')) return;
 
     try {
       const res = await fetch(`/api/orders/${orderId}`, {
@@ -87,13 +87,13 @@ export default function SettingsPage() {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage('Zamówienie zostało usunięte.');
+        setMessage('Order has been deleted.');
         fetchOrders();
       } else {
-        setError(data.error || 'Błąd podczas usuwania zamówienia');
+        setError(data.error || 'Error while deleting order');
       }
     } catch (err) {
-      setError('Wystąpił błąd podczas usuwania zamówienia');
+      setError('An error occurred while deleting order');
       console.log(err);
     }
   };
@@ -104,18 +104,18 @@ export default function SettingsPage() {
         <div className="mb-8 rounded-lg bg-gray-800 p-6 shadow-lg">
           <div className="mb-8 border-b border-gray-700 pb-8">
             <h2 className="mb-4 text-xl font-semibold text-white">
-              Twój Avatar
+              Your Avatar
             </h2>
             <div className="flex items-center gap-6">
               <AvatarUpload />
               <div className="text-gray-300">
-                <p className="text-sm">Maksymalny rozmiar pliku: 2MB</p>
-                <p className="text-sm">Akceptowane formaty: PNG, JPG, WEBP</p>
+                <p className="text-sm">Maximum file size: 2MB</p>
+                <p className="text-sm">Accepted formats: PNG, JPG, WEBP</p>
               </div>
             </div>
           </div>
           <h2 className="mb-4 text-2xl font-bold text-white">
-            Ustawienia Użytkownika
+            User Settings
           </h2>
           {message && <p className="mb-4 text-green-500">{message}</p>}
           {error && <p className="mb-4 text-red-500">{error}</p>}
@@ -125,7 +125,7 @@ export default function SettingsPage() {
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-300"
               >
-                Imię
+                Name
               </label>
               <input
                 type="text"
@@ -134,7 +134,7 @@ export default function SettingsPage() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 className="mt-1 block w-full rounded-md bg-gray-700 p-2 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Twoje imię"
+                placeholder="Your name"
               />
             </div>
 
@@ -152,7 +152,7 @@ export default function SettingsPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="mt-1 block w-full rounded-md bg-gray-700 p-2 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Twój email"
+                placeholder="Your email"
               />
             </div>
 
@@ -161,7 +161,7 @@ export default function SettingsPage() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-300"
               >
-                Nowe Hasło
+                New Password
               </label>
               <input
                 type="password"
@@ -169,7 +169,7 @@ export default function SettingsPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="mt-1 block w-full rounded-md bg-gray-700 p-2 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Nowe hasło (opcjonalne)"
+                placeholder="New password (optional)"
               />
             </div>
 
@@ -179,17 +179,17 @@ export default function SettingsPage() {
                 disabled={isLoading}
                 className="w-full rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 disabled:bg-indigo-400"
               >
-                {isLoading ? 'Aktualizowanie...' : 'Aktualizuj Dane'}
+                {isLoading ? 'Updating...' : 'Update Data'}
               </button>
             </div>
           </form>
 
           <h2 className="mb-4 text-xl font-semibold text-white">
-            Historia Zamówień
+            Order History
           </h2>
 
           {orders.length === 0 ? (
-            <p className="text-gray-300">Nie masz jeszcze żadnych zamówień.</p>
+            <p className="text-gray-300">You don&apos;t have any orders yet.</p>
           ) : (
             <div className="space-y-4">
               {orders.map((order) => (
@@ -198,15 +198,15 @@ export default function SettingsPage() {
                   className="flex items-center justify-between rounded-lg bg-gray-700 p-4 shadow-md"
                 >
                   <div className="text-white">
-                    <p className="font-medium">Zamówienie #{order.id}</p>
+                    <p className="font-medium">Order #{order.id}</p>
                     <p>Status: {order.status}</p>
-                    <p>Całkowita kwota: {order.total.toFixed(2)} PLN</p>
+                    <p>Total amount: ${order.total.toFixed(2)}</p>
                   </div>
                   <button
                     onClick={() => handleDeleteOrder(order.id)}
                     className="rounded-md bg-red-600 px-3 py-1 text-white hover:bg-red-700"
                   >
-                    Usuń
+                    Delete
                   </button>
                 </div>
               ))}

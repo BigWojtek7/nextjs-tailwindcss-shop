@@ -29,7 +29,7 @@ export default function SignUp() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Wystąpił błąd podczas rejestracji');
+        throw new Error(data.error || 'An error occurred during registration');
       }
 
       router.push('/auth/signin?registered=true');
@@ -37,7 +37,7 @@ export default function SignUp() {
       if (error instanceof Error) {
         setError(error.message);
       } else {
-        setError('Wystąpił nieoczekiwany błąd');
+        setError('An unexpected error occurred');
       }
     } finally {
       setIsLoading(false);
@@ -49,7 +49,7 @@ export default function SignUp() {
       <div className="w-full max-w-md space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight">
-            Utwórz nowe konto
+            Create new account
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -61,7 +61,7 @@ export default function SignUp() {
           <div className="space-y-4 rounded-md shadow-sm">
             <div>
               <label htmlFor="name" className="sr-only">
-                Imię
+                Name
               </label>
               <input
                 id="name"
@@ -69,12 +69,12 @@ export default function SignUp() {
                 type="text"
                 required
                 className="relative block w-full rounded-md border-0 px-3 py-1.5 text-white ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                placeholder="Imię"
+                placeholder="Name"
               />
             </div>
             <div>
               <label htmlFor="email" className="sr-only">
-                Email
+                Email address
               </label>
               <input
                 id="email"
@@ -82,12 +82,12 @@ export default function SignUp() {
                 type="email"
                 required
                 className="relative block w-full rounded-md border-0 px-3 py-1.5 text-white ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                placeholder="Adres email"
+                placeholder="Email address"
               />
             </div>
             <div>
               <label htmlFor="password" className="sr-only">
-                Hasło
+                Password
               </label>
               <input
                 id="password"
@@ -95,7 +95,7 @@ export default function SignUp() {
                 type="password"
                 required
                 className="relative block w-full rounded-md border-0 px-3 py-1.5 text-white ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                placeholder="Hasło"
+                placeholder="Password"
               />
             </div>
           </div>
@@ -106,18 +106,18 @@ export default function SignUp() {
               disabled={isLoading}
               className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-400"
             >
-              {isLoading ? 'Rejestracja...' : 'Zarejestruj się'}
+              {isLoading ? 'Registering...' : 'Register'}
             </button>
           </div>
         </form>
 
         <p className="mt-2 text-center text-sm text-gray-600">
-          Masz już konto?{' '}
+          Already have an account?{' '}
           <Link
             href="/auth/signin"
             className="font-medium text-indigo-600 hover:text-indigo-500"
           >
-            Zaloguj się
+            Sign in
           </Link>
         </p>
       </div>

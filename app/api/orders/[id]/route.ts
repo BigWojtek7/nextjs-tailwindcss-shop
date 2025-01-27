@@ -14,7 +14,7 @@ export async function DELETE(
 
   if (!id || typeof id !== 'string' || id.trim() === '') {
     return NextResponse.json(
-      { error: 'Nieprawidłowy format ID zamówienia' },
+      { error: 'Invalid order ID format' },
       { status: 400 }
     );
   }
@@ -25,7 +25,7 @@ export async function DELETE(
     if (!session?.user?.id || typeof session.user.id !== 'string') {
       console.error('Brak sesji lub nieprawidłowe ID użytkownika');
       return NextResponse.json(
-        { error: 'Wymagane uwierzytelnienie' },
+        { error: 'Authentication required' },
         { status: 401 }
       );
     }
@@ -49,7 +49,7 @@ export async function DELETE(
     }); // Usunięto przypisanie do zmiennej
 
     return NextResponse.json(
-      { message: 'Zamówienie zostało usunięte' },
+      { message: 'Order has been deleted' },
       { status: 200 }
     );
   } catch (error) {
@@ -61,13 +61,13 @@ export async function DELETE(
     // Obsługa własnych błędów
     if (errorMessage === 'NOT_FOUND') {
       return NextResponse.json(
-        { error: 'Zamówienie nie istnieje' },
+        { error: 'Order does not exist' },
         { status: 404 }
       );
     }
 
     if (errorMessage === 'FORBIDDEN') {
-      return NextResponse.json({ error: 'Brak uprawnień' }, { status: 403 });
+      return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
     // Obsługa błędów Prisma
@@ -75,19 +75,19 @@ export async function DELETE(
       switch (error.code) {
         case 'P2023':
           return NextResponse.json(
-            { error: 'Nieprawidłowy format ID' },
+            { error: 'Invalid ID format' },
             { status: 400 }
           );
         case 'P2025':
           return NextResponse.json(
-            { error: 'Zamówienie nie istnieje' },
+            { error: 'Order does not exist' },
             { status: 404 }
           );
       }
     }
 
     return NextResponse.json(
-      { error: 'Wewnętrzny błąd serwera' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
