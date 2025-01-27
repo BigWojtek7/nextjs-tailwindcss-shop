@@ -125,7 +125,7 @@ export default function ProfilePage() {
                         </p>
                         <p className="text-sm text-gray-300">
                           {new Date(order.createdAt).toLocaleDateString(
-                            'pl-PL',
+                            'en-EN',
                             {
                               day: 'numeric',
                               month: 'long',

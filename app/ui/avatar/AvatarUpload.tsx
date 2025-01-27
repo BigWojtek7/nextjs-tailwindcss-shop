@@ -8,19 +8,19 @@ import Image from 'next/image';
 const AvatarUpload = () => {
   const { data: session, update } = useSession();
   const [isLoading, setIsLoading] = useState(false);
-  const [avatarVersion, setAvatarVersion] = useState(0); // Dodajemy stan wersji avatara
+  const [avatarVersion, setAvatarVersion] = useState(0); // Add avatar version state
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !session?.user?.id) return;
 
     if (!file.type.startsWith('image/')) {
-      toast.error('Proszę wybrać plik obrazu');
+      toast.error('Please select an image file');
       return;
     }
 
     if (file.size > 2 * 1024 * 1024) {
-      toast.error('Plik jest zbyt duży (maks. 2MB)');
+      toast.error('File is too large (max 2MB)');
       return;
     }
 
@@ -34,23 +34,23 @@ const AvatarUpload = () => {
         body: formData,
       });
 
-      if (!response.ok) throw new Error('Błąd uploadu');
+      if (!response.ok) throw new Error('Upload error');
 
-      // Wymuś aktualizację poprzez zmianę wersji
-      setAvatarVersion(prev => prev + 1);
+      // Force update by changing version
+      setAvatarVersion((prev) => prev + 1);
       await update();
 
-      toast.success('Avatar zaktualizowany!');
+      toast.success('Avatar updated!');
     } catch (error) {
       console.error(error);
-      toast.error('Błąd podczas zmiany avatara');
+      toast.error('Error while changing avatar');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Generuj unikalny URL z timestampem
-  const avatarUrl = session?.user?.avatarUrl 
+  // Generate unique URL with timestamp
+  const avatarUrl = session?.user?.avatarUrl
     ? `${session.user.avatarUrl}?v=${avatarVersion}&ts=${Date.now()}`
     : '/default-avatar.png';
 
@@ -59,11 +59,11 @@ const AvatarUpload = () => {
       <div className="relative h-32 w-32 overflow-hidden rounded-full border-2 border-gray-200">
         <Image
           src={avatarUrl}
-          alt="Avatar użytkownika"
+          alt="User avatar"
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 768px"
-          key={avatarVersion} // Wymuś remont komponentu
+          key={avatarVersion} // Force component remount
           onError={(e) => {
             (e.target as HTMLImageElement).src = '/default-avatar.png';
           }}
@@ -71,10 +71,12 @@ const AvatarUpload = () => {
       </div>
 
       <label className="relative cursor-pointer">
-        <span className={`rounded-lg px-4 py-2 text-white transition-colors ${
-          isLoading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'
-        }`}>
-          {isLoading ? 'Przesyłanie...' : 'Zmień avatar'}
+        <span
+          className={`rounded-lg px-4 py-2 text-white transition-colors ${
+            isLoading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'
+          }`}
+        >
+          {isLoading ? 'Uploading...' : 'Change avatar'}
         </span>
         <input
           type="file"
