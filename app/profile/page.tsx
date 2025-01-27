@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import UserAvatar from '../ui/avatar/UserAvatar';
 
-import type { Order } from '../lib/definitions';
+import type { Order } from '@/app/lib/definitions';
 import type { OrdersResponse } from '../lib/definitions';
 
 export default function ProfilePage() {
@@ -61,51 +61,51 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-base-100 py-8">
-    <div className="container mx-auto max-w-5xl px-4">
-      {/* Sekcja profilowa */}
-      <div className="mb-8 rounded-lg bg-gray-800 p-6 shadow-lg">
-        <div className="flex flex-col items-center gap-6 md:flex-row md:items-start">
-          {/* Avatar i przyciski */}
-          <div className="flex flex-col items-center gap-4">
-            <UserAvatar size={200} />
-            <button
-              onClick={() => signOut({ callbackUrl: '/' })}
-              className="w-full rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              Wyloguj się
-            </button>
-          </div>
-          
-          {/* Dane użytkownika */}
-          <div className="flex-1 space-y-4">
-            <h2 className="text-2xl font-bold text-white">Twój profil</h2>
-            <div className="space-y-2 rounded-lg bg-gray-700 p-4">
-              <div className="flex items-center gap-3">
-                <span className="text-white">👤</span>
-                <div>
-                  <p className="text-sm text-gray-300">Imię</p>
-                  <p className="text-lg font-medium text-white">
-                    {session.user.name || 'Brak danych'}
-                  </p>
+      <div className="container mx-auto max-w-5xl px-4">
+        {/* Sekcja profilowa */}
+        <div className="mb-8 rounded-lg bg-gray-800 p-6 shadow-lg">
+          <div className="flex flex-col items-center gap-6 md:flex-row md:items-start">
+            {/* Avatar i przyciski */}
+            <div className="flex flex-col items-center gap-4">
+              <UserAvatar size={200} />
+              <button
+                onClick={() => signOut({ callbackUrl: '/' })}
+                className="w-full rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
+                Wyloguj się
+              </button>
+            </div>
+
+            {/* Dane użytkownika */}
+            <div className="flex-1 space-y-4">
+              <h2 className="text-2xl font-bold text-white">Twój profil</h2>
+              <div className="space-y-2 rounded-lg bg-gray-700 p-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-white">👤</span>
+                  <div>
+                    <p className="text-sm text-gray-300">Imię</p>
+                    <p className="text-lg font-medium text-white">
+                      {session.user.name || 'Brak danych'}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-white">📧</span>
-                <div>
-                  <p className="text-sm text-gray-300">Email</p>
-                  <p className="text-lg font-medium text-white">
-                    {session.user.email}
-                  </p>
+                <div className="flex items-center gap-3">
+                  <span className="text-white">📧</span>
+                  <div>
+                    <p className="text-sm text-gray-300">Email</p>
+                    <p className="text-lg font-medium text-white">
+                      {session.user.email}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Sekcja historii zamówień */}
-      <div className="rounded-lg bg-gray-800 p-6 shadow-lg">
-        <h3 className="mb-6 text-xl font-bold text-white">
+        {/* Sekcja historii zamówień */}
+        <div className="rounded-lg bg-gray-800 p-6 shadow-lg">
+          <h3 className="mb-6 text-xl font-bold text-white">
             Historia zamówień
           </h3>
           {error ? (
