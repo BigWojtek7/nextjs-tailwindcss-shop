@@ -6,27 +6,8 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import UserAvatar from '../ui/avatar/UserAvatar';
 
-interface OrderItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image?: string;
-}
-
-interface Order {
-  id: string;
-  total: number;
-  status: 'PENDING' | 'COMPLETED' | 'CANCELLED';
-  createdAt: string;
-  items: OrderItem[];
-}
-
-interface OrdersResponse {
-  success: boolean;
-  orders: Order[];
-  error?: string;
-}
+import type { Order } from '../lib/definitions';
+import type { OrdersResponse } from '../lib/definitions';
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();

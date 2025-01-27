@@ -2,23 +2,9 @@
 
 import { createContext, useContext, useState, useEffect } from 'react';
 
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  quantity: number;
-}
+import type { CartItem } from '@/app/lib/definitions';
 
-interface CartContextType {
-  items: CartItem[];
-  addToCart: (product: Omit<CartItem, 'quantity'>) => void;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
-  clearCart: () => void;
-  totalItems: number;
-  totalPrice: number;
-}
+import type { CartContextType } from '@/app/lib/definitions';
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 

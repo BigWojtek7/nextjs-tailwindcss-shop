@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Product } from '@/app/lib/definitions';
+import type { Product } from '@/app/lib/definitions';
 
 interface ProductCardProps {
   product: Product;

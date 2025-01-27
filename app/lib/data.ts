@@ -2,14 +2,7 @@ import { Product } from './definitions';
 
 const API_URL = 'https://fakestoreapi.com';
 
-// Poprawiony interfejs - API fakestore zwraca ID jako number
-interface ApiProduct {
-  id: number; // Zmiana z string na number
-  title: string;
-  price: number;
-  image: string;
-  description: string;
-}
+import type { ApiProduct } from '@/app/lib/definitions';
 
 export async function getProducts(): Promise<Product[]> {
   const response = await fetch(`${API_URL}/products`);
