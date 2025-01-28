@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Image from 'next/image';
+import Button from '@/app/ui/button/Button';
 
 export default function CartPage() {
   const { items, removeFromCart, updateQuantity, clearCart } = useCart();
@@ -120,28 +121,28 @@ export default function CartPage() {
                 </div>
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center">
-                    <button
+                    <Button
                       onClick={() =>
                         updateQuantity(item.id, Math.max(1, item.quantity - 1))
                       }
                       className="rounded-l bg-black px-3 py-1 hover:bg-gray-800"
                     >
                       -
-                    </button>
+                    </Button>
                     <span className="w-12 text-center">{item.quantity}</span>
-                    <button
+                    <Button
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       className="rounded-r bg-black px-3 py-1 hover:bg-gray-800"
                     >
                       +
-                    </button>
+                    </Button>
                   </div>
-                  <button
+                  <Button
                     onClick={() => removeFromCart(item.id)}
                     className="text-red-600 hover:text-red-800"
                   >
                     Remove
-                  </button>
+                  </Button>
                 </div>
               </div>
             ))}
@@ -155,13 +156,13 @@ export default function CartPage() {
               <span className="font-semibold">{total.toFixed(2)} zł</span>
             </div>
           </div>
-          <button
+          <Button
             onClick={handleCheckout}
             disabled={isLoading}
             className="mt-6 w-full rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 disabled:bg-indigo-400"
           >
             {isLoading ? 'Processing...' : 'Proceed to payment'}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

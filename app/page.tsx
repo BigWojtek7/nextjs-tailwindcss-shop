@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { ProductCard } from './ui/product-card/ProductCard';
 import { Product } from '@/app/lib/definitions';
 import { getProducts } from '@/app/lib/data';
+import Button from '@/app/ui/button/Button';
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -40,9 +41,9 @@ export default function HomePage() {
         <ProductCard key={product.id} product={product} />
       ))}
       {products.length > visibleProducts && (
-        <button onClick={loadMore} className="btn btn-secondary mt-4">
+        <Button onClick={loadMore} className="btn btn-secondary mt-4">
           More
-        </button>
+        </Button>
       )}
     </div>
   );

@@ -4,6 +4,7 @@ import { signIn } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Button from '@/app/ui/button/Button';
 
 export default function SignIn() {
   const searchParams = useSearchParams();
@@ -100,13 +101,13 @@ export default function SignIn() {
           </div>
 
           <div>
-            <button
+            <Button
               type="submit"
               disabled={isLoading}
-              className="group relative flex w-full justify-center rounded-md  px-3 py-2 bg-indigo-600 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-400"
+              className="group relative flex w-full justify-center rounded-md px-3 py-2 bg-indigo-600 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-400"
             >
               {isLoading ? 'Signing in...' : 'Sign in'}
-            </button>
+            </Button>
           </div>
         </form>
 

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Product } from '@/app/lib/definitions';
 import { useCart } from '@/app/context/CartContext';
 import { getProduct } from '@/app/lib/data';
+import Button from '@/app/ui/button/Button';
 
 const ProductDetails = () => {
   const params = useParams();
@@ -52,9 +53,9 @@ const ProductDetails = () => {
         <h1 className="text-2xl font-bold">{product.name}</h1>
         <p className="mt-2 text-xl">{product.price} PLN</p>
         <p className="mt-4">{product.description}</p>
-        <button onClick={handleAddToCart} className="btn btn-primary mt-6">
+        <Button onClick={handleAddToCart} className="btn btn-primary mt-6">
           Add to Cart
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import UserAvatar from '../ui/avatar/UserAvatar';
+import Button from '@/app/ui/button/Button';
 
 import type { Order } from '@/app/lib/definitions';
 import type { OrdersResponse } from '../lib/definitions';
@@ -68,12 +69,12 @@ export default function ProfilePage() {
             {/* Avatar and Buttons */}
             <div className="flex flex-col items-center gap-4">
               <UserAvatar size={200} />
-              <button
+              <Button
                 onClick={() => signOut({ callbackUrl: '/' })}
                 className="w-full rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 Sign Out
-              </button>
+              </Button>
             </div>
 
             {/* User Data */}
