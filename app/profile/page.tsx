@@ -3,9 +3,10 @@
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import UserAvatar from '../ui/avatar/UserAvatar';
 import Button from '@/app/ui/button/Button';
+import { OrderStatus } from '../ui/profile/OrderStatus';
+import { OrderItem } from '../ui/profile/OrderItem';
 
 import type { Order } from '@/app/lib/definitions';
 import type { OrdersResponse } from '../lib/definitions';
@@ -139,54 +140,18 @@ export default function ProfilePage() {
                         <p className="font-semibold text-white">
                           Total: {order.total.toFixed(2)} zł
                         </p>
-                        <p
-                          className={`text-sm font-medium ${
-                            order.status === 'COMPLETED'
-                              ? 'text-green-600'
-                              : order.status === 'CANCELLED'
-                                ? 'text-red-600'
-                                : 'text-yellow-600'
-                          }`}
-                        >
-                          {order.status === 'COMPLETED'
-                            ? 'Completed'
-                            : order.status === 'CANCELLED'
-                              ? 'Cancelled'
-                              : 'In Progress'}
-                        </p>
+                        <OrderStatus status={order.status} />
                       </div>
                     </div>
                   </div>
                   <div className="divide-y divide-gray-200 p-4">
                     {order.items.map((item) => (
-                      <div
+                      <OrderItem
                         key={item.id}
-                        className="flex items-center justify-between py-4 first:pt-0 last:pb-0"
-                      >
-                        <div className="flex items-center space-x-4">
-                          {item.image && (
-                            <div className="relative h-20 w-20 overflow-hidden rounded-md border border-gray-200">
-                              <Image
-                                src={item.image}
-                                alt={item.name}
-                                fill
-                                className="object-cover"
-                              />
-                            </div>
-                          )}
-                          <div>
-                            <p className="font-medium text-white">
-                              {item.name}
-                            </p>
-                            <p className="mt-1 text-sm text-gray-300">
-                              {item.quantity} x {item.price.toFixed(2)} zł
-                            </p>
-                          </div>
-                        </div>
-                        <p className="font-medium text-white">
-                          {(item.quantity * item.price).toFixed(2)} zł
-                        </p>
-                      </div>
+                        id={item.id}
+                        name={item.name}
+                        image={item.image || '/default-product-image.jpg'}
+                      />
                     ))}
                   </div>
                 </div>
