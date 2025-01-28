@@ -4,9 +4,11 @@ interface OrderItemProps {
   id: string;
   name: string;
   image: string;
+  quantity: number;
+  price: number;
 }
 
-export function OrderItem({ name, image }: OrderItemProps) {
+export function OrderItem({ name, image, quantity, price }: OrderItemProps) {
   return (
     <div className="flex items-center justify-between py-4 first:pt-0 last:pb-0">
       <div className="flex items-center space-x-4">
@@ -15,7 +17,16 @@ export function OrderItem({ name, image }: OrderItemProps) {
             <Image src={image} alt={name} fill className="object-cover" />
           </div>
         )}
+        <div>
+          <p className="font-medium text-white">{name}</p>
+          <p className="mt-1 text-sm text-gray-300">
+            {quantity} x {price.toFixed(2)} zł
+          </p>
+        </div>
       </div>
+      <p className="font-medium text-white">
+        {(quantity * price).toFixed(2)} zł
+      </p>
     </div>
   );
 }
