@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
   if (!session?.user?.id) {
     return NextResponse.json(
-      { error: 'Nieautoryzowany dostęp' },
+      { error: 'Unauthorized access' },
       { status: 401 }
     );
   }
@@ -22,12 +22,12 @@ export async function POST(request: Request) {
 
   // Walidacja pliku
   if (!file) {
-    return NextResponse.json({ error: 'Brak pliku' }, { status: 400 });
+    return NextResponse.json({ error: 'No file provided' }, { status: 400 });
   }
 
   if (file.size > 2 * 1024 * 1024) {
     return NextResponse.json(
-      { error: 'Plik jest zbyt duży (max 2MB)' },
+      { error: 'File is too large (max 2MB)' },
       { status: 400 }
     );
   }
@@ -52,9 +52,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.error('Błąd podczas uploadu avatara:', error);
+    console.error('Error during avatar upload:', error);
     return NextResponse.json(
-      { error: 'Wewnętrzny błąd serwera' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

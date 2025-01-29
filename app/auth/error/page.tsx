@@ -7,17 +7,17 @@ export default function ErrorPage() {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
 
-  let errorMessage = 'Wystąpił nieoczekiwany błąd';
+  let errorMessage = 'An unexpected error occurred';
 
   switch (error) {
     case 'CredentialsSignin':
-      errorMessage = 'Nieprawidłowy email lub hasło';
+      errorMessage = 'Invalid email or password';
       break;
     case 'AccessDenied':
-      errorMessage = 'Brak dostępu';
+      errorMessage = 'Access denied';
       break;
     case 'Verification':
-      errorMessage = 'Link weryfikacyjny wygasł lub jest nieprawidłowy';
+      errorMessage = 'Verification link has expired or is invalid';
       break;
   }
 
@@ -26,7 +26,7 @@ export default function ErrorPage() {
       <div className="w-full max-w-md space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-red-600">
-            Błąd logowania
+            Login Error
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             {errorMessage}
@@ -37,7 +37,7 @@ export default function ErrorPage() {
             href="/auth/signin"
             className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
-            Wróć do strony logowania
+            Back to login page
           </Link>
         </div>
       </div>

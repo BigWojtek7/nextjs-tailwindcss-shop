@@ -4,16 +4,7 @@ import { authOptions } from '@/app/lib/authOptions';
 import { prisma } from '@/app/lib/prisma';
 import type { Prisma } from '@prisma/client';
 
-interface OrderData {
-  items: Array<{
-    id: string | number;
-    name: string;
-    price: number;
-    quantity: number;
-    image?: string;
-  }>;
-  total: number;
-}
+import type { OrderData } from '@/app/lib/definitions';
 
 export async function POST(req: Request) {
   try {

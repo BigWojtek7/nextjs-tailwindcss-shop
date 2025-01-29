@@ -15,7 +15,7 @@ export async function PUT(req: Request) {
 
   if (!session?.user?.id) {
     return NextResponse.json(
-      { error: 'Musisz być zalogowany' },
+      { error: 'You must be logged in' },
       { status: 401 }
     );
   }
@@ -44,7 +44,7 @@ export async function PUT(req: Request) {
     });
 
     return NextResponse.json(
-      { message: 'Dane użytkownika zostały zaktualizowane', user: updatedUser },
+      { message: 'User data has been updated', user: updatedUser },
       { status: 200 }
     );
   } catch (error) {
@@ -54,13 +54,13 @@ export async function PUT(req: Request) {
 
     if (e.code === 'P2002') {
       return NextResponse.json(
-        { error: 'Użytkownik z tym adresem email już istnieje' },
+        { error: 'User with this email already exists' },
         { status: 400 }
       );
     }
 
     return NextResponse.json(
-      { error: 'Wystąpił błąd podczas aktualizacji danych' },
+      { error: 'An error occurred while updating data' },
       { status: 500 }
     );
   }

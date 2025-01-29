@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Product } from '@/app/lib/definitions';
+import type { Product } from '@/app/lib/definitions';
 
 interface ProductCardProps {
   product: Product;
@@ -29,7 +29,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <p>{product.price} PLN</p>
         <div className="card-actions justify-end">
           <Link href={`/product/${product.id}`} className="btn btn-primary">
-            Zobacz Szczegóły
+            More details...
           </Link>
         </div>
       </div>

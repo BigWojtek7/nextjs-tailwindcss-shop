@@ -8,27 +8,27 @@ export async function POST(req: Request) {
 
     if (!name || !email || !password) {
       return NextResponse.json(
-        { error: 'Wszystkie pola są wymagane' },
+        { error: 'All fields are required' },
         { status: 400 }
       );
     }
 
-    // Sprawdź czy użytkownik już istnieje
+    // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
 
     if (existingUser) {
       return NextResponse.json(
-        { error: 'Użytkownik z tym adresem email już istnieje' },
+        { error: 'User with this email already exists' },
         { status: 400 }
       );
     }
 
-    // Zahaszuj hasło
+    // Hash password
     const hashedPassword = await hash(password, 12);
 
-    // Utwórz nowego użytkownika
+    // Create new user
     const user = await prisma.user.create({
       data: {
         name,
@@ -43,13 +43,13 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(
-      { message: 'Użytkownik został zarejestrowany', user },
+      { message: 'User has been registered', user },
       { status: 201 }
     );
   } catch (error) {
     console.error('Registration error:', error);
     return NextResponse.json(
-      { error: 'Wystąpił błąd podczas rejestracji' },
+      { error: 'An error occurred during registration' },
       { status: 500 }
     );
   }

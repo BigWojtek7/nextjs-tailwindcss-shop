@@ -46,7 +46,7 @@ const UserAvatar = ({ size = 32 }: { size?: number }) => {
           height: `${size}px`,
         }}
         priority
-        onLoadingComplete={() => setIsMounted(true)}
+        onLoad={() => setIsMounted(true)}
         onError={() => setAvatarUrl('/default-avatar.png')}
       />
       {!isMounted && (
